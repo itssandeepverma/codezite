@@ -348,5 +348,29 @@ void inorder(Node* node, std::function<void(Node*)> visit) {
   visit(node);
   inorder(node->right, visit);
 }`
+  },
+  treeHeight: {
+    javascript: `function maxDepth(root) {
+  if (!root) return 0;
+  if (!root.left && !root.right) return 1;
+  const left = maxDepth(root.left);
+  const right = maxDepth(root.right);
+  return 1 + Math.max(left, right);
+}`,
+    python: `def max_depth(root):
+  if root is None:
+    return 0
+  if root.left is None and root.right is None:
+    return 1
+  left = max_depth(root.left)
+  right = max_depth(root.right)
+  return 1 + max(left, right)`,
+    cpp: `int maxDepth(Node* root) {
+  if (!root) return 0;
+  if (!root->left && !root->right) return 1;
+  int left = maxDepth(root->left);
+  int right = maxDepth(root->right);
+  return 1 + std::max(left, right);
+}`
   }
 };

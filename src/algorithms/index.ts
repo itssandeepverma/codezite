@@ -7,6 +7,7 @@ import { dfsSteps } from './dfs';
 import { reverseLinkedListSteps, reverseLinkedListRecursiveSteps } from './linkedList';
 import { stackSteps, queueSteps } from './stackQueue';
 import { treeTraversalSteps } from './treeTraversal';
+import { treeHeightSteps } from './treeHeight';
 import { codeSnippets } from '../data/codeSnippets';
 import {
   exampleArrays,
@@ -115,6 +116,16 @@ export const algorithms: AlgorithmDefinition[] = [
     description: 'Inorder traversal of a binary tree',
     generator: (input) => treeTraversalSteps(input),
     code: codeSnippets.treeTraversal,
+    inputKind: 'tree',
+    defaults: { tree: exampleTree }
+  },
+  {
+    id: 'tree-height',
+    name: 'Binary Tree Height (Recursive)',
+    category: 'Trees',
+    description: 'Compute height using recursive max depth',
+    generator: (input) => treeHeightSteps(input),
+    code: codeSnippets.treeHeight,
     inputKind: 'tree',
     defaults: { tree: exampleTree }
   }

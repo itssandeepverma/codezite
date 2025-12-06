@@ -51,6 +51,8 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
       onInputChange({ ...input, array: numbers });
     } else if (selectedAlgo?.inputKind === 'list') {
       onInputChange({ ...input, list: numbers });
+    } else if (selectedAlgo?.inputKind === 'tree') {
+      onInputChange({ ...input, tree: numbers });
     } else if (selectedAlgo?.id === 'stack') {
       onInputChange({ ...input, stack: numbers });
     } else if (selectedAlgo?.id === 'queue') {
@@ -122,7 +124,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
           </>
         )}
 
-        {['array', 'list', 'stackQueue'].includes(selectedAlgo?.inputKind || '') && (
+        {['array', 'list', 'stackQueue', 'tree'].includes(selectedAlgo?.inputKind || '') && (
           <div className="inline-field grow">
             <label htmlFor="manual-input">Manual input</label>
             <div className="manual-row">
