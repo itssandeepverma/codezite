@@ -36,59 +36,73 @@ const ControlsBar: React.FC<ControlsBarProps> = ({
 }) => {
   return (
     <div className="controls-bar" aria-label="Playback controls">
-      <button className="control-button" onClick={onPlayPause} aria-label={playing ? 'Pause' : 'Play'}>
-        {playing ? 'Pause (Space)' : 'Play (Space)'}
-      </button>
-      <button className="control-button" onClick={onStepBackward} aria-label="Step backward">
-        ← Step
-      </button>
-      <button className="control-button" onClick={onStepForward} aria-label="Step forward">
-        Step →
-      </button>
-      <button className="control-button" onClick={onReset} aria-label="Reset">
-        Stop / Reset
-      </button>
-      <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        Speed
-        <input
-          type="range"
-          min={0.1}
-          max={3}
-          step={0.1}
-          value={speed}
-          onChange={(e) => onSpeedChange(Number(e.target.value))}
-          aria-label="Speed"
-          style={{ width: 160 }}
-        />
-        <span className="tag">{speed.toFixed(1)}x</span>
-      </label>
-      <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        Scale
-        <input
-          type="range"
-          min={0.7}
-          max={1.5}
-          step={0.05}
-          value={scale}
-          onChange={(e) => onScaleChange(Number(e.target.value))}
-          aria-label="Canvas scale"
-          style={{ width: 140 }}
-        />
-        <span className="tag">{scale.toFixed(2)}x</span>
-      </label>
-      <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <input type="checkbox" checked={loop} onChange={(e) => onLoopChange(e.target.checked)} aria-label="Loop playback" />
-        Loop
-      </label>
-      <div style={{ marginLeft: 'auto', fontSize: 13 }}>
-        Step {Math.max(0, position.index + 1)} / {position.total}
+      <div className="glass-deck">
+        <div className="deck-glow" aria-hidden />
+
+        <div className="transport">
+          <button className="glass-button ghost" onClick={onStepBackward} aria-label="Step backward">
+            <span className="icon">⏮</span>
+          </button>
+
+          <button className="glass-button primary" onClick={onPlayPause} aria-label={playing ? 'Pause' : 'Play'}>
+            <span className="icon">{playing ? '⏸' : '▶'}</span>
+          </button>
+
+          <button className="glass-button ghost" onClick={onStepForward} aria-label="Step forward">
+            <span className="icon">⏭</span>
+          </button>
+
+          <button className="glass-button ghost" onClick={onReset} aria-label="Stop / Reset">
+            <span className="icon">⏹</span>
+          </button>
+        </div>
+
+        <div className="meters">
+          <label className="slider" aria-label="Playback speed">
+            <span className="label">Speed</span>
+            <input
+              type="range"
+              min={0.1}
+              max={3}
+              step={0.1}
+              value={speed}
+              onChange={(e) => onSpeedChange(Number(e.target.value))}
+            />
+            <span className="chip">{speed.toFixed(1)}x</span>
+          </label>
+
+          <label className="slider" aria-label="Canvas scale">
+            <span className="label">Scale</span>
+            <input
+              type="range"
+              min={0.7}
+              max={1.5}
+              step={0.05}
+              value={scale}
+              onChange={(e) => onScaleChange(Number(e.target.value))}
+            />
+            <span className="chip">{scale.toFixed(2)}x</span>
+          </label>
+
+          <label className="chip toggle">
+            <input type="checkbox" checked={loop} onChange={(e) => onLoopChange(e.target.checked)} aria-label="Loop playback" />
+            <span>Loop</span>
+          </label>
+
+          <div className="chip subtle">
+            Step {Math.max(0, position.index + 1)} / {position.total}
+          </div>
+        </div>
+
+        <div className="actions">
+          <button className="glass-button ghost" onClick={onSnapshot} aria-label="Export snapshot">
+            Capture
+          </button>
+          <button className="glass-button ghost" onClick={onPermalink} aria-label="Copy link with state">
+            Permalink
+          </button>
+        </div>
       </div>
-      <button className="control-button" onClick={onSnapshot} aria-label="Export snapshot">
-        Snapshot PNG
-      </button>
-      <button className="control-button" onClick={onPermalink} aria-label="Copy link with state">
-        Copy Permalink
-      </button>
     </div>
   );
 };
