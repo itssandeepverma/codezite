@@ -199,14 +199,11 @@ const App: React.FC = () => {
         </div>
         <div
           className="pane-grid"
-          style={{
-            gridTemplateColumns: `${colSizes.inspect}px 8px ${colSizes.visual}px 8px ${colSizes.code}px`
-          }}
         >
           <div className="area-inspect">
             <Inspector step={currentStep} state={currentState} />
           </div>
-          <div className="resize-handle" style={{ gridArea: 'handle1' }} onMouseDown={startDrag('inspect')} />
+          <div className="resize-handle" style={{ gridArea: 'handle1' }} />
           <div className="panel split-panel area-visual" aria-label="Visualizer">
             <div className="label-row" style={{ marginBottom: 6 }}>
               <h3 style={{ margin: 0 }}>{algorithm.name}</h3>
@@ -214,7 +211,7 @@ const App: React.FC = () => {
             </div>
             <Visualizer state={currentState} step={currentStep} svgRef={svgRef} scale={scale} />
           </div>
-          <div className="resize-handle" style={{ gridArea: 'handle2' }} onMouseDown={startDrag('code')} />
+          <div className="resize-handle" style={{ gridArea: 'handle2' }} />
           <div className="panel split-panel area-code">
             <div className="label-row" style={{ marginBottom: 6 }}>
               <h3 style={{ margin: 0 }}>Code & Stack</h3>

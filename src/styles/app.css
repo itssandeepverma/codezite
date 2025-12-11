@@ -43,14 +43,16 @@
   flex-direction: column;
   gap: 12px;
   padding: 10px 16px 96px;
+  width: 100%;
 }
 
 .pane-grid {
   display: grid;
-  grid-template-columns: 280px 8px 1fr 8px 340px;
+  grid-template-columns: 15% 8px 45% 8px 40%;
   grid-template-areas: 'inspect handle1 visual handle2 code';
   align-items: stretch;
   gap: 0;
+  width: 100%;
 }
 
 .area-alg {
@@ -422,7 +424,7 @@ textarea.input-area {
 
 @media (max-width: 1200px) {
   .pane-grid {
-    grid-template-columns: 240px 6px 1fr 6px 300px;
+    grid-template-columns: 15% 6px 45% 6px 40%;
   }
 }
 
