@@ -372,5 +372,85 @@ void inorder(Node* node, std::function<void(Node*)> visit) {
   int right = maxDepth(root->right);
   return 1 + std::max(left, right);
 }`
+  },
+  nQueens: {
+    javascript: `function solveNQueens(n) {
+  const cols = new Set();
+  const diag1 = new Set(); // row - col
+  const diag2 = new Set(); // row + col
+  const board = Array(n).fill(-1);
+
+  function backtrack(row) {
+    if (row === n) {
+      return true;
+    }
+    for (let col = 0; col < n; col++) {
+      if (cols.has(col) || diag1.has(row - col) || diag2.has(row + col)) continue;
+      board[row] = col;
+      cols.add(col);
+      diag1.add(row - col);
+      diag2.add(row + col);
+      if (backtrack(row + 1)) return true;
+      board[row] = -1;
+      cols.delete(col);
+      diag1.delete(row - col);
+      diag2.delete(row + col);
+    }
+    return false;
+  }
+
+  backtrack(0);
+  return board;
+}`,
+    python: `def solve_n_queens(n):
+  cols = set()
+  diag1 = set()  # row - col
+  diag2 = set()  # row + col
+  board = [-1] * n
+
+  def backtrack(row):
+    if row == n:
+      return True
+    for col in range(n):
+      if col in cols or (row - col) in diag1 or (row + col) in diag2:
+        continue
+      board[row] = col
+      cols.add(col)
+      diag1.add(row - col)
+      diag2.add(row + col)
+      if backtrack(row + 1):
+        return True
+      board[row] = -1
+      cols.remove(col)
+      diag1.remove(row - col)
+      diag2.remove(row + col)
+    return False
+
+  backtrack(0)
+  return board`,
+    cpp: `bool backtrack(int row, int n, std::vector<int>& board, std::unordered_set<int>& cols,
+               std::unordered_set<int>& diag1, std::unordered_set<int>& diag2) {
+  if (row == n) return true;
+  for (int col = 0; col < n; col++) {
+    if (cols.count(col) || diag1.count(row - col) || diag2.count(row + col)) continue;
+    board[row] = col;
+    cols.insert(col);
+    diag1.insert(row - col);
+    diag2.insert(row + col);
+    if (backtrack(row + 1, n, board, cols, diag1, diag2)) return true;
+    board[row] = -1;
+    cols.erase(col);
+    diag1.erase(row - col);
+    diag2.erase(row + col);
+  }
+  return false;
+}
+
+std::vector<int> solveNQueens(int n) {
+  std::vector<int> board(n, -1);
+  std::unordered_set<int> cols, diag1, diag2;
+  backtrack(0, n, board, cols, diag1, diag2);
+  return board;
+}`
   }
 };

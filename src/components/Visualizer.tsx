@@ -13,6 +13,84 @@ interface VisualizerProps {
 }
 
 const Visualizer: React.FC<VisualizerProps> = ({ state, step, svgRef, scale = 1 }) => {
+  const renderBoard = () => {
+    const board = state.board;
+    if (!board) return null;
+    const { size, queens, attempt, solved } = board;
+    if (!size || size <= 0) return null;
+
+    const boardSize = Math.min(width - 40, height - 60);
+    const cellSize = boardSize / size;
+    const offsetX = (width - boardSize) / 2;
+    const offsetY = (height - boardSize) / 2;
+
+    const isQueen = (r: number, c: number) => queens.some((q) => q.row === r && q.col === c);
+    const queenByCell = (r: number, c: number) => queens.find((q) => q.row === r && q.col === c);
+
+    return (
+      <g transform={`translate(${offsetX},${offsetY})`}>
+        {Array.from({ length: size }).map((_, r) =>
+          Array.from({ length: size }).map((__, c) => {
+            const x = c * cellSize;
+            const y = r * cellSize;
+            const isDark = (r + c) % 2 === 1;
+            const isAttempt = attempt && attempt.row === r && attempt.col === c && !isQueen(r, c);
+            const queen = queenByCell(r, c);
+            const fill = queen
+              ? queen.conflict
+                ? '#ff6b6b'
+                : solved
+                ? '#7cf8c4'
+                : '#6bd1ff'
+              : isAttempt
+              ? 'rgba(255, 255, 255, 0.35)'
+              : isDark
+              ? 'rgba(11,22,43,0.2)'
+              : 'rgba(255,255,255,0.4)';
+            return (
+              <g key={`${r}-${c}`}>
+                <rect x={x} y={y} width={cellSize} height={cellSize} fill={fill} stroke="rgba(11,22,43,0.3)" rx={4} />
+                {queen && (
+                  <g>
+                    {solved && (
+                      <circle
+                        cx={x + cellSize / 2}
+                        cy={y + cellSize / 2}
+                        r={cellSize * 0.4}
+                        fill="rgba(124, 248, 196, 0.35)"
+                      />
+                    )}
+                    <text
+                      x={x + cellSize / 2}
+                      y={y + cellSize / 2 + 5}
+                      textAnchor="middle"
+                      fontSize={cellSize * 0.45}
+                      fontWeight={800}
+                      fill={queen.conflict ? '#fff' : solved ? '#06311f' : '#0b162b'}
+                    >
+                      ♛
+                    </text>
+                  </g>
+                )}
+                {isAttempt && (
+                  <circle cx={x + cellSize / 2} cy={y + cellSize / 2} r={cellSize * 0.12} fill="rgba(11,22,43,0.5)" />
+                )}
+              </g>
+            );
+          })
+        )}
+        <text
+          x={boardSize / 2}
+          y={-10}
+          textAnchor="middle"
+          fontSize={12}
+          fill="#0b162b"
+          opacity={0.7}
+        >{`N = ${size}${solved ? ' · solution found' : ''}`}</text>
+      </g>
+    );
+  };
+
   const renderArray = () => {
     const arr = state.array || [];
     if (!arr.length) return null;
@@ -260,6 +338,7 @@ const Visualizer: React.FC<VisualizerProps> = ({ state, step, svgRef, scale = 1 
             <path d="M0,0 L0,6 L9,3 z" fill="#0b162b" />
           </marker>
         </defs>
+        {renderBoard()}
         {renderArray()}
         {renderList()}
         {renderStack()}

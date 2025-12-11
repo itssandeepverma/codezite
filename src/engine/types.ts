@@ -20,6 +20,12 @@ export type VisualState = {
   list?: Array<{ id: string; value: number; next?: string | null; role?: 'head' | 'tail' | 'current'; pos?: number }>;
   stack?: number[];
   queue?: number[];
+  board?: {
+    size: number;
+    queens: Array<{ row: number; col: number; active?: boolean; conflict?: boolean }>;
+    attempt?: { row: number; col: number };
+    solved?: boolean;
+  };
   graph?: {
     nodes: Array<{ id: string; label?: string; active?: boolean; visited?: boolean; frontier?: boolean }>;
     edges: Array<{ id: string; from: string; to: string; active?: boolean; visited?: boolean }>;
@@ -59,7 +65,7 @@ export interface AlgorithmDefinition {
     python?: string;
     cpp?: string;
   };
-  inputKind: 'array' | 'graph' | 'list' | 'stackQueue' | 'tree';
+  inputKind: 'array' | 'graph' | 'list' | 'stackQueue' | 'tree' | 'nqueen';
   defaults: VisualizerInput;
 }
 
@@ -75,6 +81,7 @@ export interface VisualizerInput {
   stack?: number[];
   queue?: number[];
   tree?: number[];
+  nQueens?: number;
 }
 
 export interface EngineCallbacks {

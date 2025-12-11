@@ -8,6 +8,7 @@ import { reverseLinkedListSteps, reverseLinkedListRecursiveSteps } from './linke
 import { stackSteps, queueSteps } from './stackQueue';
 import { treeTraversalSteps } from './treeTraversal';
 import { treeHeightSteps } from './treeHeight';
+import { nQueenSteps } from './nQueen';
 import { codeSnippets } from '../data/codeSnippets';
 import {
   exampleArrays,
@@ -15,7 +16,8 @@ import {
   exampleList,
   exampleQueue,
   exampleStack,
-  exampleTree
+  exampleTree,
+  exampleNQueens
 } from '../data/examples';
 
 export const algorithms: AlgorithmDefinition[] = [
@@ -128,7 +130,17 @@ export const algorithms: AlgorithmDefinition[] = [
     code: codeSnippets.treeHeight,
     inputKind: 'tree',
     defaults: { tree: exampleTree }
+  },
+  {
+    id: 'n-queens',
+    name: 'N-Queens',
+    category: 'Backtracking',
+    description: 'Place N queens on an N×N board with no conflicts',
+    generator: (input) => nQueenSteps(input),
+    code: codeSnippets.nQueens,
+    inputKind: 'nqueen',
+    defaults: { nQueens: exampleNQueens }
   }
 ];
 
-export const categories = ['Arrays', 'Linked List', 'Stacks & Queues', 'Trees', 'Graphs'];
+export const categories = ['Arrays', 'Linked List', 'Stacks & Queues', 'Trees', 'Graphs', 'Backtracking'];

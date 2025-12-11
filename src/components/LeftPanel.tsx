@@ -57,6 +57,10 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
       onInputChange({ ...input, stack: numbers });
     } else if (selectedAlgo?.id === 'queue') {
       onInputChange({ ...input, queue: numbers });
+    } else if (selectedAlgo?.inputKind === 'nqueen') {
+      if (numbers[0]) {
+        onInputChange({ ...input, nQueens: numbers[0] });
+      }
     }
   };
 
@@ -124,7 +128,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
           </>
         )}
 
-        {['array', 'list', 'stackQueue', 'tree'].includes(selectedAlgo?.inputKind || '') && (
+        {['array', 'list', 'stackQueue', 'tree', 'nqueen'].includes(selectedAlgo?.inputKind || '') && (
           <div className="inline-field grow">
             <label htmlFor="manual-input">Manual input</label>
             <div className="manual-row">
@@ -134,7 +138,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
                 aria-label="Manual input"
                 value={manual}
                 onChange={(e) => setManual(e.target.value)}
-                placeholder="4, 2, 7, 1"
+                placeholder={selectedAlgo?.inputKind === 'nqueen' ? 'Enter N (e.g., 8)' : '4, 2, 7, 1'}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleManualSubmit();
                 }}
@@ -143,6 +147,20 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
                 Apply
               </button>
             </div>
+          </div>
+        )}
+
+        {selectedAlgo?.inputKind === 'nqueen' && (
+          <div className="inline-field small">
+            <label htmlFor="nq-size">Board size (N)</label>
+            <input
+              id="nq-size"
+              type="number"
+              min={4}
+              max={12}
+              value={input.nQueens ?? 4}
+              onChange={(e) => onInputChange({ ...input, nQueens: Number(e.target.value) || 4 })}
+            />
           </div>
         )}
 

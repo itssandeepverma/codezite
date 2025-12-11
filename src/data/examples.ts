@@ -21,3 +21,4 @@ export const exampleList = [3, 1, 4, 1, 5];
 export const exampleStack = [1, 2, 3];
 export const exampleQueue = [7, 8, 9];
 export const exampleTree = [7, 3, 9, 1, 5, 8, 10];
+export const exampleNQueens = 4;
