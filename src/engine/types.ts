@@ -17,6 +17,7 @@ export type StepType =
 
 export type VisualState = {
   array?: number[];
+  arrayMode?: 'bars' | 'cells';
   list?: Array<{ id: string; value: number; next?: string | null; role?: 'head' | 'tail' | 'current'; pos?: number }>;
   stack?: number[];
   queue?: number[];
@@ -65,7 +66,7 @@ export interface AlgorithmDefinition {
     python?: string;
     cpp?: string;
   };
-  inputKind: 'array' | 'graph' | 'list' | 'stackQueue' | 'tree' | 'nqueen';
+  inputKind: 'array' | 'graph' | 'list' | 'stackQueue' | 'tree' | 'nqueen' | 'dp-number' | 'coin-change';
   defaults: VisualizerInput;
 }
 
@@ -82,6 +83,10 @@ export interface VisualizerInput {
   queue?: number[];
   tree?: number[];
   nQueens?: number;
+  n?: number;
+  coins?: number[];
+  amount?: number;
+  target?: number;
 }
 
 export interface EngineCallbacks {

@@ -22,3 +22,6 @@ export const exampleStack = [1, 2, 3];
 export const exampleQueue = [7, 8, 9];
 export const exampleTree = [7, 3, 9, 1, 5, 8, 10];
 export const exampleNQueens = 4;
+export const exampleStairs = 5;
+export const exampleCoins = { coins: [1, 2, 5], amount: 11 };
+export const exampleTwoSum = { array: [2, 7, 11, 15], target: 9 };

@@ -12,7 +12,7 @@ hljs.registerLanguage('cpp', cpp);
 
 interface CodeViewerProps {
   code: string;
-  language: 'javascript' | 'python' | 'cpp';
+  language: 'javascript' | 'python' | 'cpp' | 'java';
   highlightLine?: number;
 }
 

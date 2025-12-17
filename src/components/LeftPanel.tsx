@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AlgorithmDefinition, VisualizerInput } from '../engine/types';
 import '../styles/app.css';
 
@@ -38,8 +38,21 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
   const [size, setSize] = useState(8);
   const [range, setRange] = useState<[number, number]>([1, 99]);
   const [manual, setManual] = useState('');
+  const [coinText, setCoinText] = useState('1, 2, 5');
+  const [coinAmount, setCoinAmount] = useState(11);
 
   const selectedAlgo = algorithms.find((a) => a.id === selectedId);
+
+  useEffect(() => {
+    if (selectedAlgo?.inputKind === 'coin-change') {
+      if (input.coins && input.coins.length) {
+        setCoinText(input.coins.join(', '));
+      }
+      if (typeof input.amount === 'number') {
+        setCoinAmount(input.amount);
+      }
+    }
+  }, [input.amount, input.coins, selectedAlgo]);
 
   const handleManualSubmit = () => {
     const numbers = manual
@@ -60,6 +73,10 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
     } else if (selectedAlgo?.inputKind === 'nqueen') {
       if (numbers[0]) {
         onInputChange({ ...input, nQueens: numbers[0] });
+      }
+    } else if (selectedAlgo?.inputKind === 'dp-number') {
+      if (numbers[0]) {
+        onInputChange({ ...input, n: numbers[0] });
       }
     }
   };
@@ -128,7 +145,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
           </>
         )}
 
-        {['array', 'list', 'stackQueue', 'tree', 'nqueen'].includes(selectedAlgo?.inputKind || '') && (
+        {['array', 'list', 'stackQueue', 'tree', 'nqueen', 'dp-number'].includes(selectedAlgo?.inputKind || '') && (
           <div className="inline-field grow">
             <label htmlFor="manual-input">Manual input</label>
             <div className="manual-row">
@@ -138,7 +155,13 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
                 aria-label="Manual input"
                 value={manual}
                 onChange={(e) => setManual(e.target.value)}
-                placeholder={selectedAlgo?.inputKind === 'nqueen' ? 'Enter N (e.g., 8)' : '4, 2, 7, 1'}
+                placeholder={
+                  selectedAlgo?.inputKind === 'nqueen'
+                    ? 'Enter N (e.g., 8)'
+                    : selectedAlgo?.inputKind === 'dp-number'
+                    ? 'Enter N (e.g., 5)'
+                    : '4, 2, 7, 1'
+                }
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleManualSubmit();
                 }}
@@ -162,6 +185,47 @@ const LeftPanel: React.FC<LeftPanelProps> = ({
               onChange={(e) => onInputChange({ ...input, nQueens: Number(e.target.value) || 4 })}
             />
           </div>
+        )}
+
+        {selectedAlgo?.inputKind === 'coin-change' && (
+          <>
+            <div className="inline-field grow">
+              <label htmlFor="coins-input">Coins</label>
+              <div className="manual-row">
+                <input
+                  id="coins-input"
+                  className="text-inline"
+                  aria-label="Coins list"
+                  value={coinText}
+                  onChange={(e) => setCoinText(e.target.value)}
+                  placeholder="1, 2, 5"
+                />
+              </div>
+            </div>
+            <div className="inline-field small">
+              <label htmlFor="amount-input">Amount</label>
+              <input
+                id="amount-input"
+                type="number"
+                min={1}
+                max={100}
+                value={coinAmount}
+                onChange={(e) => setCoinAmount(Number(e.target.value) || 0)}
+              />
+            </div>
+            <button
+              className="control-button ghost"
+              onClick={() => {
+                const coins = coinText
+                  .split(/[,\s]+/)
+                  .map((v) => Number(v.trim()))
+                  .filter((v) => !Number.isNaN(v) && v > 0);
+                onInputChange({ ...input, coins: coins.length ? coins : [1], amount: coinAmount || 1 });
+              }}
+            >
+              Apply
+            </button>
+          </>
         )}
 
         <div className="inline-field">

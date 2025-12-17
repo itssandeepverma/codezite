@@ -452,5 +452,167 @@ std::vector<int> solveNQueens(int n) {
   backtrack(0, n, board, cols, diag1, diag2);
   return board;
 }`
+  },
+  climbStairs: {
+    javascript: `function climbStairs(n) {
+  if (n <= 1) return 1;
+  const dp = Array(n + 1).fill(0);
+  dp[0] = 1;
+  dp[1] = 1;
+  for (let i = 2; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2];
+  }
+  return dp[n];
+}`,
+    python: `def climb_stairs(n):
+  if n <= 1:
+    return 1
+  dp = [0] * (n + 1)
+  dp[0] = 1
+  dp[1] = 1
+  for i in range(2, n + 1):
+    dp[i] = dp[i - 1] + dp[i - 2]
+  return dp[n]`,
+    cpp: `int climbStairs(int n) {
+  if (n <= 1) return 1;
+  std::vector<int> dp(n + 1, 0);
+  dp[0] = dp[1] = 1;
+  for (int i = 2; i <= n; ++i) {
+    dp[i] = dp[i - 1] + dp[i - 2];
+  }
+  return dp[n];
+}`
+  },
+  coinChange: {
+    javascript: `function coinChange(coins, amount) {
+  const INF = amount + 1;
+  const dp = Array(amount + 1).fill(INF);
+  dp[0] = 0;
+  for (const coin of coins) {
+    for (let a = coin; a <= amount; a++) {
+      dp[a] = Math.min(dp[a], 1 + dp[a - coin]);
+    }
+  }
+  return dp[amount] === INF ? -1 : dp[amount];
+}`,
+    python: `def coin_change(coins, amount):
+  INF = amount + 1
+  dp = [INF] * (amount + 1)
+  dp[0] = 0
+  for coin in coins:
+    for a in range(coin, amount + 1):
+      dp[a] = min(dp[a], 1 + dp[a - coin])
+  return -1 if dp[amount] == INF else dp[amount]`,
+    cpp: `int coinChange(std::vector<int>& coins, int amount) {
+  int INF = amount + 1;
+  std::vector<int> dp(amount + 1, INF);
+  dp[0] = 0;
+  for (int coin : coins) {
+    for (int a = coin; a <= amount; ++a) {
+      dp[a] = std::min(dp[a], 1 + dp[a - coin]);
+    }
+  }
+  return dp[amount] == INF ? -1 : dp[amount];
+}`
+  }
+  ,
+  twoSum: {
+    javascript: `function twoSum(nums, target) {
+  const map = new Map(); // value -> index
+  for (let i = 0; i < nums.length; i++) {
+    const need = target - nums[i];
+    if (map.has(need)) return [map.get(need), i];
+    map.set(nums[i], i);
+  }
+  return [];
+}`,
+    python: `def twoSum(nums, target):
+  mp = {}
+  for i, v in enumerate(nums):
+    need = target - v
+    if need in mp:
+      return [mp[need], i]
+    mp[v] = i
+  return []`,
+    java: `class Solution {
+  public int[] twoSum(int[] nums, int target) {
+    Map<Integer, Integer> mp = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+      int need = target - nums[i];
+      if (mp.containsKey(need)) return new int[]{mp.get(need), i};
+      mp.put(nums[i], i);
+    }
+    return new int[0];
+  }
+}`,
+    cpp: `vector<int> twoSum(vector<int>& nums, int target) {
+  unordered_map<int, int> mp; // value -> index
+  for (int i = 0; i < static_cast<int>(nums.size()); ++i) {
+    int need = target - nums[i];
+    auto it = mp.find(need);
+    if (it != mp.end()) {
+      return {it->second, i};
+    }
+    mp[nums[i]] = i;
+  }
+  return {};
+}`
+  }
+  ,
+  containerWater: {
+    javascript: `function maxArea(h) {
+  let l = 0, r = h.length - 1, best = 0;
+  while (l < r) {
+    const area = Math.min(h[l], h[r]) * (r - l);
+    if (area > best) best = area;
+    if (h[l] < h[r]) {
+      l++;
+    } else {
+      r--;
+    }
+  }
+  return best;
+}`,
+    python: `def maxArea(h):
+  l, r, best = 0, len(h) - 1, 0
+  while l < r:
+    area = min(h[l], h[r]) * (r - l)
+    if area > best:
+      best = area
+    if h[l] < h[r]:
+      l += 1
+    else:
+      r -= 1
+  return best`,
+    java: `class Solution {
+  public int maxArea(int[] h) {
+    int l = 0, r = h.length - 1, best = 0;
+    while (l < r) {
+      int area = Math.min(h[l], h[r]) * (r - l);
+      if (area > best) best = area;
+      if (h[l] < h[r]) {
+        l++;
+      } else {
+        r--;
+      }
+    }
+    return best;
+  }
+}`,
+    cpp: `int maxArea(vector<int>& h) {
+  int l = 0, r = static_cast<int>(h.size()) - 1, best = 0;
+  while (l < r) {
+    int area = min(h[l], h[r]) * (r - l);
+    if (area > best) {
+      best = area;
+    }
+    if (h[l] < h[r]) {
+      l++;
+    } else {
+      r--;
+    }
+  }
+  return best;
+}`
   }
 };

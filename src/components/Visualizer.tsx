@@ -94,6 +94,43 @@ const Visualizer: React.FC<VisualizerProps> = ({ state, step, svgRef, scale = 1 
   const renderArray = () => {
     const arr = state.array || [];
     if (!arr.length) return null;
+    const mode = state.arrayMode || 'bars';
+
+    if (mode === 'cells') {
+      const cellWidth = Math.max(36, (width - 80) / Math.max(arr.length, 1));
+      const cellHeight = 46;
+      const startX = 20;
+      const startY = height / 2 - cellHeight / 2;
+      return (
+        <g transform={`translate(${startX},${startY})`}>
+          {arr.map((v, idx) => {
+            const x = idx * (cellWidth + 8);
+            const highlight = state.highlight?.indices?.includes(idx);
+            return (
+              <g key={idx}>
+                <rect
+                  x={x}
+                  y={0}
+                  width={cellWidth}
+                  height={cellHeight}
+                  rx={8}
+                  fill={highlight ? '#1b74e4' : 'rgba(255,255,255,0.85)'}
+                  stroke="#0b162b"
+                  strokeWidth={highlight ? 2 : 1}
+                />
+                <text x={x + cellWidth / 2} y={cellHeight / 2 + 4} textAnchor="middle" fontWeight={700} fill="#0b162b">
+                  {v}
+                </text>
+                <text x={x + cellWidth / 2} y={cellHeight + 14} textAnchor="middle" fontSize={11} fill="#6b7280">
+                  {idx}
+                </text>
+              </g>
+            );
+          })}
+        </g>
+      );
+    }
+
     const max = Math.max(...arr, 1);
     const barWidth = Math.max(10, (width - 40) / arr.length);
     return (
@@ -131,13 +168,47 @@ const Visualizer: React.FC<VisualizerProps> = ({ state, step, svgRef, scale = 1 
   const renderList = () => {
     const list = state.list || [];
     if (!list.length) return null;
+    const isMapView = list.every((n) => n.role === 'current');
     const y = height / 2;
     const spacing = 160;
     const nodeWidth = 96;
     const nodeHeight = 54;
     const nodesById = Object.fromEntries(list.map((n) => [n.id, n]));
+
+    if (isMapView) {
+      const startX = 20;
+      const startY = 50;
+      const rowH = 32;
+      const colW = 120;
+      return (
+        <g transform={`translate(${startX},${startY})`}>
+          <text x={0} y={-14} fontSize={12} fill="#0b162b" fontWeight={700}>
+            Map (key : index)
+          </text>
+          <rect x={0} y={0} width={colW * 2} height={rowH} rx={6} fill="#eef2ff" stroke="#cbd5e1" />
+          <text x={colW / 2} y={rowH / 2 + 4} textAnchor="middle" fontWeight={700} fill="#0b162b">
+            Key
+          </text>
+          <text x={(3 * colW) / 2} y={rowH / 2 + 4} textAnchor="middle" fontWeight={700} fill="#0b162b">
+            Index
+          </text>
+          {list.map((node, idx) => (
+            <g key={node.id} transform={`translate(0, ${(idx + 1) * rowH})`}>
+              <rect x={0} y={0} width={colW * 2} height={rowH} rx={6} fill="#fff" stroke="#cbd5e1" />
+              <text x={colW / 2} y={rowH / 2 + 4} textAnchor="middle" fontWeight={700} fill="#0b162b">
+                {node.value}
+              </text>
+              <text x={(3 * colW) / 2} y={rowH / 2 + 4} textAnchor="middle" fontWeight={600} fill="#1b74e4">
+                {node.next}
+              </text>
+            </g>
+          ))}
+        </g>
+      );
+    }
+
     return (
-      <g transform="translate(40,0)">
+      <g transform={`translate(40,0)`}>
         {list.map((node) => {
           const x = (node.pos ?? 0) * spacing;
           const isActive = node.role === 'current';
